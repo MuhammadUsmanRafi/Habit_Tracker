@@ -3,7 +3,8 @@ from datetime import datetime
 import requests
 
 # Constants
-name = input("Enter Your username for the first")
+# name = input("Enter Your username for the first")
+name = input("write a user_name")
 USERNAME = name
 TOKEN_KEY = "gsdkdndndsfkdnksdfnsdfkdsn"
 GRAPH_ID = "graph1"
@@ -12,8 +13,8 @@ TODAY = DATE.strftime("%Y%m%d")
 
 # Endpoints
 USER_ENDPOINT = "https://pixe.la/v1/users"
-GRAPH_ENDPOINT = f"{USER_ENDPOINT}/{USERNAME}/graphs/{GRAPH_ID}"
-GRAPH_DEF_ENDPOINT = f"{USER_ENDPOINT}/{USERNAME}/graphs/graph1/graph-def"
+GRAPH_ENDPOINT = f"{USER_ENDPOINT}/{USERNAME}/graphs"
+UPDATE_DELETE_ENDPOINT = f"{USER_ENDPOINT}/{USERNAME}/graphs/{GRAPH_ID}/{datetime.now().strftime('%Y%m%d')}"
 
 # Headers
 GRAPH_HEADER = {
@@ -36,38 +37,27 @@ def create_user():
 def create_graph():
     graph_parameter = {
         "id": GRAPH_ID,
-        "name": "Coding graph",
+        "name": "Coding hours",
         "unit": "hours",
         "type": "float",
-        "color": "sora",
+        "color": "ajisai",
     }
     response = requests.post(url=GRAPH_ENDPOINT, json=graph_parameter, headers=GRAPH_HEADER)
     return response.text
 
 
-def create_pixel():
-    quantity = input("How many hours did you code today? ")
-    pixel_creation_parameter = {
-        "date": datetime.now().strftime("%Y%m%d"),
-        "quantity": quantity,
-    }
-    response = requests.post(url=GRAPH_ENDPOINT, json=pixel_creation_parameter, headers=GRAPH_HEADER)
-    return response.text
-
-
 def update_pixel():
-    quantity = "45.78"  # Replace with the actual quantity
+    quantity = input("Enter how many hours did you coding today?")  # Replace with the actual quantity
     pixel_update_parameter = {
         "quantity": quantity,
         "optionalData": TODAY,  # Optional date
     }
-    response = requests.put(url=f"{GRAPH_ENDPOINT}/{datetime.now().strftime('%Y%m%d')}", json=pixel_update_parameter,
-                            headers=GRAPH_HEADER)
+    response = requests.put(url=UPDATE_DELETE_ENDPOINT, json=pixel_update_parameter, headers=GRAPH_HEADER)
     return response.text
 
 
 def delete_pixel():
-    response = requests.delete(url=f"{GRAPH_ENDPOINT}/{datetime.now().strftime('%Y%m%d')}", headers=GRAPH_HEADER)
+    response = requests.delete(url=UPDATE_DELETE_ENDPOINT, headers=GRAPH_HEADER)
     return response.text
 
 
@@ -78,9 +68,6 @@ if __name__ == "__main__":
 
     # Uncomment to create a new graph
     # print(create_graph())
-
-    # Uncomment to create a new pixel
-    # print(create_pixel())
 
     # Uncomment to update a pixel
     print(update_pixel())
